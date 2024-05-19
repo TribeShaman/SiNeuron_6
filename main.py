@@ -30,6 +30,14 @@ with open('Dane/cal.tab') as file:
 # Trenowanie perceptronu na danych treningowych
 neuron.train(training_data)
 
+error_history = neuron.get_error_history()
+plt.plot(error_history)
+plt.title('Perceptron Training Error History')
+plt.xlabel('Iteration')
+plt.ylabel('Number of Misclassifications')
+plt.grid(True)
+plt.show()
+
 # Podział danych testowych na dwie klasy na podstawie predykcji perceptronu
 class_0_x = []
 class_0_y = []
@@ -60,4 +68,6 @@ plt.xlabel('X')
 plt.ylabel('Y')
 plt.title('Classification with Perceptron')
 plt.grid(True)
+plt.xlim(0,25)
+plt.ylim(0,25)
 plt.show()

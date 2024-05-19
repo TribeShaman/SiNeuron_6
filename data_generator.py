@@ -4,7 +4,7 @@ import random
 generated_data = []
 
 # Generowanie 100 linii danych
-for _ in range(10):
+for _ in range(100):
     x1 = random.randint(0, 25)
     x2 = random.randint(0, 25)
     # Ustalenie etykiety klasy na podstawie pozycji punktu względem prostej y = x
