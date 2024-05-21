@@ -27,8 +27,12 @@ with open('Dane/cal.tab') as file:
         # Dodanie wczytanych danych do listy danych testowych
         test_data.append(data)
 
-# Trenowanie perceptronu na danych treningowych
-neuron.train(training_data)
+for _ in range(100):
+    neuron.train(training_data)
+    if neuron.errors[-1] == 0:
+        break
+
+
 
 error_history = neuron.get_error_history()
 plt.plot(error_history)
@@ -56,6 +60,8 @@ for inputs in test_data:
 # Rysowanie punktów testowych na wykresie
 plt.scatter(class_0_x, class_0_y, color='blue', label='Class 0')
 plt.scatter(class_1_x, class_1_y, color='red', label='Class 1')
+
+neuron.train(test_data)
 
 # Rysowanie prostej separującej klasy na podstawie danych treningowych
 x_values = np.linspace(0, 30, 100)
