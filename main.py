@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from perceptron import Perceptron
+import data_generator
 
 iterations = 1000
 learning_threshold = 0.01
@@ -8,6 +9,9 @@ learning_rate = 0.01
 
 # Tworzenie instancji perceptronu
 neuron = Perceptron(learning_rate)
+
+#generowanie danych
+data_generator.generate_data()
 
 # Wczytywanie danych treningowych z pliku
 training_data = []

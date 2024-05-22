@@ -1,19 +1,30 @@
 import random
+import os
 
-generated_data = []
+def generate_data():
+    # Upewnij się, że katalog "Dane" istnieje
+    os.makedirs('Dane', exist_ok=True)
 
-for _ in range(100):
-    x = random.randint(0, 25)
-    y = random.randint(0, 25)
+    generated_data = []
 
-    if y >= (-(1/3)*x)+15:
-        label = 0
-    else:
-        label = 1
+    # Generowanie danych
+    for _ in range(100):
+        x = random.randint(0, 25)
+        y = random.randint(0, 25)
 
-    generated_data.append([x, y, label])
-for data in generated_data:
-    print(','.join(map(str, data)))
+        if y >= (-(1 / 3) * x) + 15:
+            label = 0
+        else:
+            label = 1
+
+        generated_data.append([x, y, label])
+
+    # Zapisywanie danych do pliku
+    with open('Dane/in.tab', 'w') as file:
+        for data in generated_data:
+            file.write(','.join(map(str, data)))
+            file.write('\n')
+
 
 
 
