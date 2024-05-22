@@ -1,13 +1,10 @@
 import numpy as np
 
-
 class Perceptron:
-    def __init__(self, input_size, learning_rate=0.01, iterations=100):
+    def __init__(self,learning_rate=0.01,input_size=3):
         self.weights = np.random.rand(input_size)  # Inicjalizacja losowych wag (wliczając bias)
         self.learning_rate = learning_rate
-        self.iterations = iterations
         self.errors = []
-
 
     def predict(self, inputs):
         summation = np.dot(inputs[:-1], self.weights[1:]) + self.weights[0]  # Sumowanie ważonych wejść (bez label)
@@ -18,23 +15,18 @@ class Perceptron:
         return activation
 
     def train(self, training_inputs):
-        self.errors.append(0)
         total_error = 0
         for inputs in training_inputs:
             label = inputs[-1]  # Pobranie etykiety z danych wejściowych
             prediction = self.predict(inputs)
             error = label - prediction  # obliczenie bledu
+            error_sqr = error*error
             self.weights[1:] += self.learning_rate * error * np.array(inputs[:-1],dtype=float)  # Korekcja wag (bez biasu i label)
-            self.weights[0] += self.learning_rate * error# Korekcja biasu
+            self.weights[0] += self.learning_rate * error # Korekcja biasu
             a = round(-self.weights[1] / self.weights[2], 2)  # Współczynnik kierunkowy dla x
             b = round(-self.weights[0] / self.weights[2], 2)  # Przesunięcie w osi y
-            total_error += int(error != 0)
-            print("y = ", a, "x + ", b)
-        self.errors.append(total_error / len(training_inputs))
-        print(self.errors[-1])
-
-
-
+            total_error += int(error_sqr != 0)
+        self.errors.append( total_error / len(training_inputs))
 
     def get_error_history(self):
         return self.errors

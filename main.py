@@ -2,8 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from perceptron import Perceptron
 
+iterations = 1000
+learning_threshold = 0.01
+learning_rate = 0.01
+
 # Tworzenie instancji perceptronu
-neuron = Perceptron(3)
+neuron = Perceptron(learning_rate)
 
 # Wczytywanie danych treningowych z pliku
 training_data = []
@@ -16,29 +20,18 @@ with open('Dane/in.tab') as file:
         # Dodanie wczytanych danych do listy danych treningowych
         training_data.append(data)
 
-# Wczytywanie danych testowych z pliku
-test_data = []
-with open('Dane/cal.tab') as file:
-    for line in file:
-        # Wczytywanie danych i dzielenie ich na listę wartości oddzielonych przecinkami
-        data = line.strip().split(',')
-        # Konwersja danych na liczby zmiennoprzecinkowe
-        data = [float(x) for x in data]
-        # Dodanie wczytanych danych do listy danych testowych
-        test_data.append(data)
-
-for _ in range(100):
+for _ in range(iterations):
     neuron.train(training_data)
-    if neuron.errors[-1] == 0:
+    if neuron.errors[-1] <= learning_threshold:
         break
-
-
 
 error_history = neuron.get_error_history()
 plt.plot(error_history)
 plt.title('Perceptron Training Error History')
 plt.xlabel('Iteration')
 plt.ylabel('Number of Misclassifications')
+plt.xlim(-30,iterations+30)
+plt.ylim(-0.1,0.4)
 plt.grid(True)
 plt.show()
 
