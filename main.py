@@ -48,7 +48,7 @@ class_0_y = []
 class_1_x = []
 class_1_y = []
 
-for inputs in test_data:
+for inputs in training_data:
     label = int(inputs[-1])
     if label == 0:
         class_0_x.append(inputs[0])
@@ -61,7 +61,7 @@ for inputs in test_data:
 plt.scatter(class_0_x, class_0_y, color='blue', label='Class 0')
 plt.scatter(class_1_x, class_1_y, color='red', label='Class 1')
 
-neuron.train(test_data)
+
 
 # Rysowanie prostej separującej klasy na podstawie danych treningowych
 x_values = np.linspace(0, 30, 100)

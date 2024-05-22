@@ -7,8 +7,9 @@ generated_data = []
 for _ in range(1000):
     x1 = random.randint(0, 25)
     x2 = random.randint(0, 25)
-
-    if x2 >= 2*x1:
+    a = random.randint(-5,5)
+    b = random.randint(0,5)
+    if x2 >= (a*x1)+b:
         label = 0
     else:
         label = 1
