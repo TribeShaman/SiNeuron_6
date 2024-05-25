@@ -6,6 +6,8 @@ import numpy as np
 from perceptron import Perceptron
 import data_generator
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from pathlib import Path
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 training_data = []
 iterations = 1000
@@ -45,7 +47,7 @@ def plot_graph():
     ax1.set_ylim(-0.1, 0.4)
     ax1.grid(True)
 
-    # Wykres 2: Klasyczacja z perceptronem
+    # Wykres 2: Klasyfikacja z perceptronem
     class_0_x = []
     class_0_y = []
     class_1_x = []
@@ -60,16 +62,13 @@ def plot_graph():
             class_1_x.append(inputs[0])
             class_1_y.append(inputs[1])
 
-    # Rysowanie punktów testowych na wykresie
     ax2.scatter(class_0_x, class_0_y, color='blue', label='Class 0')
     ax2.scatter(class_1_x, class_1_y, color='red', label='Class 1')
 
-    # Rysowanie prostej separującej klasy na podstawie danych treningowych
     x_values = np.linspace(0, 30, 100)
     y_values = (-neuron.weights[1] * x_values - neuron.weights[0]) / neuron.weights[2]
     ax2.plot(x_values, y_values, color='green', label='Decision Boundary')
 
-    # Dodanie legendy i wyświetlenie wykresu
     ax2.legend()
     ax2.set_xlabel('X')
     ax2.set_ylabel('Y')
@@ -78,7 +77,6 @@ def plot_graph():
     ax2.set_xlim(0, 25)
     ax2.set_ylim(0, 25)
 
-    # Utwórz obiekt FigureCanvasTkAgg
     canvas = FigureCanvasTkAgg(fig, master=plot_frame)
     canvas.draw()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
@@ -91,38 +89,118 @@ def learn():
         if neuron.errors[-1] <= learning_threshold:
             break
 
-def center_window(window, width, height):
-    screen_width = window.winfo_screenwidth()
-    screen_height = window.winfo_screenheight()
+OUTPUT_PATH = Path(__file__).parent
+ASSETS_PATH = OUTPUT_PATH / "assets" / "frame0"
 
-    x = (screen_width - width) // 2
-    y = (screen_height - height) // 2
 
-    window.geometry(f"{width}x{height}+{x}+{y}")
+def relative_to_assets(path: str) -> Path:
+    return ASSETS_PATH / Path(path)
 
-window = tk.Tk()
 
-window_width = 1200
-window_height = 800
-center_window(window, window_width, window_height)
-window.title("Perceptron v0.1")
+window = Tk()
 
-button = tk.Button(window, text="Wygeneruj dane", command=data_generator.generate_data)
-button.pack(pady=10)
+window.geometry("1200x900")
+window.configure(bg = "#F6F9FF")
 
-load_button = tk.Button(window, text="Wczytaj plik", command=load_file)
-load_button.pack(pady=10)
 
-plot_button = tk.Button(window, text="Naucz perceptron", command=learn)
-plot_button.pack(pady=10)
+canvas = Canvas(
+    window,
+    bg = "#F6F9FF",
+    height = 800,
+    width = 1200,
+    bd = 0,
+    highlightthickness = 0,
+    relief = "ridge"
+)
 
-plot_button = tk.Button(window, text="Pokaż wykresy", command=plot_graph)
-plot_button.pack(pady=10)
+canvas.place(x = 0, y = 0)
+canvas.create_rectangle(
+    0.0,
+    0.0,
+    1200.0,
+    129.0,
+    fill="#B4C5E4",
+    outline="")
 
-# Utwórz ramkę dla wykresów
+canvas.create_text(
+    600.0,
+    55.0,
+    anchor="center",
+    text="Perceptron",
+    fill="#F6F9FF",
+    font=("Arial", 96, "bold")
+)
+
+button_image_1 = PhotoImage(
+    file=relative_to_assets("button_1.png"))
+button_1 = Button(
+    image=button_image_1,
+    borderwidth=0,
+    highlightthickness=0,
+    command=data_generator.generate_data,
+    relief="flat"
+)
+button_1.place(
+    x=114.0,
+    y=174.0,
+    width=372.0,
+    height=81.0
+)
+
+button_image_2 = PhotoImage(
+    file=relative_to_assets("button_2.png"))
+button_2 = Button(
+    image=button_image_2,
+    borderwidth=0,
+    highlightthickness=0,
+    command=load_file,
+    relief="flat"
+)
+button_2.place(
+    x=714.0,
+    y=174.0,
+    width=372.0,
+    height=81.0
+)
+
+button_image_3 = PhotoImage(
+    file=relative_to_assets("button_3.png"))
+button_3 = Button(
+    image=button_image_3,
+    borderwidth=0,
+    highlightthickness=0,
+    command=learn,
+    relief="flat"
+)
+button_3.place(
+    x=114.0,
+    y=327.0,
+    width=372.0,
+    height=81.0
+)
+
+button_image_4 = PhotoImage(
+    file=relative_to_assets("button_4.png"))
+button_4 = Button(
+    image=button_image_4,
+    borderwidth=0,
+    highlightthickness=0,
+    command=plot_graph,
+    relief="flat"
+)
+button_4.place(
+    x=714.0,
+    y=327.0,
+    width=372.0,
+    height=81.0
+)
+
 plot_frame = tk.Frame(window)
-plot_frame.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
-
-
-
+plot_frame.place(
+    x=50.0,
+    y=450.0,
+    width=1100.0,
+    height=400.0
+)
+window.resizable(False, False)
 window.mainloop()
