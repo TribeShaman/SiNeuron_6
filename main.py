@@ -89,9 +89,51 @@ def learn():
         if neuron.errors[-1] <= learning_threshold:
             break
 
+def open_custom_point_window():
+    custom_window = tk.Toplevel(window)
+    custom_window.title("Custom Point Selector")
+    custom_window.geometry("300x350")
+
+    points = []
+
+    # Etykiety do wyświetlania wartości układu współrzędnych
+    coord_label = tk.Label(custom_window, text="X: 0, Y: 0")
+    coord_label.pack(pady=5)
+
+    def on_click(event):
+        canvas_height = 250
+        x, y = event.x, event.y
+        # Przeskalowanie współrzędnych do zakresu <0, 25>
+        x_scaled = x / 10
+        y_scaled = (canvas_height - y) / 10  # Odwrócenie osi Y
+        label = label_var.get()
+        canvas.create_oval(x-2, y-2, x+2, y+2, fill='black')
+        points.append((x_scaled, y_scaled, label))
+        coord_label.config(text=f"X: {x_scaled:.2f}, Y: {y_scaled:.2f}")
+    def save_points():
+        training_data.clear()
+        for point in points:
+            x, y, label = point
+            training_data.append(point)
+        messagebox.showinfo("Punkty wczytane", "Wczytano punkty")
+        custom_window.destroy()
+
+    canvas = tk.Canvas(custom_window, bg="white")
+    canvas.pack(fill=tk.BOTH, expand=True)
+    canvas.bind("<Button-1>", on_click)
+
+    label_var = tk.IntVar()
+    label_frame = tk.Frame(custom_window)
+    label_frame.pack()
+    tk.Radiobutton(label_frame, text="Label 0", variable=label_var, value=0).pack(side=tk.LEFT)
+    tk.Radiobutton(label_frame, text="Label 1", variable=label_var, value=1).pack(side=tk.LEFT)
+    label_var.set(0)
+
+    save_button = tk.Button(custom_window, text="Save Points", command=save_points)
+    save_button.pack()
+
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / "assets" / "frame0"
-
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -123,12 +165,12 @@ canvas.create_rectangle(
     outline="")
 
 canvas.create_text(
-    600.0,
-    55.0,
-    anchor="center",
+    0.0,
+    0.0,
+    anchor="nw",
     text="Perceptron",
     fill="#F6F9FF",
-    font=("Arial", 96, "bold")
+    font=("Karla ExtraBold", 96 * -1)
 )
 
 button_image_1 = PhotoImage(
@@ -158,8 +200,8 @@ button_2 = Button(
 )
 button_2.place(
     x=714.0,
-    y=174.0,
-    width=372.0,
+    y=170.0,
+    width=184.0,
     height=81.0
 )
 
@@ -169,13 +211,13 @@ button_3 = Button(
     image=button_image_3,
     borderwidth=0,
     highlightthickness=0,
-    command=learn,
+    command=open_custom_point_window,
     relief="flat"
 )
 button_3.place(
-    x=114.0,
-    y=327.0,
-    width=372.0,
+    x=902.0,
+    y=170.0,
+    width=184.0,
     height=81.0
 )
 
@@ -185,10 +227,26 @@ button_4 = Button(
     image=button_image_4,
     borderwidth=0,
     highlightthickness=0,
-    command=plot_graph,
+    command=learn,
     relief="flat"
 )
 button_4.place(
+    x=114.0,
+    y=327.0,
+    width=372.0,
+    height=81.0
+)
+
+button_image_5 = PhotoImage(
+    file=relative_to_assets("button_5.png"))
+button_5 = Button(
+    image=button_image_5,
+    borderwidth=0,
+    highlightthickness=0,
+    command=plot_graph,
+    relief="flat"
+)
+button_5.place(
     x=714.0,
     y=327.0,
     width=372.0,
@@ -198,7 +256,7 @@ button_4.place(
 plot_frame = tk.Frame(window)
 plot_frame.place(
     x=50.0,
-    y=450.0,
+    y=410.0,
     width=1100.0,
     height=400.0
 )
