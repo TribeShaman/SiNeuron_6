@@ -96,16 +96,14 @@ def open_custom_point_window():
 
     points = []
 
-    # Etykiety do wyświetlania wartości układu współrzędnych
     coord_label = tk.Label(custom_window, text="X: 0, Y: 0")
     coord_label.pack(pady=5)
 
     def on_click(event):
         canvas_height = 250
         x, y = event.x, event.y
-        # Przeskalowanie współrzędnych do zakresu <0, 25>
         x_scaled = x / 10
-        y_scaled = (canvas_height - y) / 10  # Odwrócenie osi Y
+        y_scaled = (canvas_height - y) / 10
         label = label_var.get()
         canvas.create_oval(x-2, y-2, x+2, y+2, fill='black')
         points.append((x_scaled, y_scaled, label))
