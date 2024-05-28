@@ -92,9 +92,9 @@ def learn():
 def open_custom_point_window():
     custom_window = tk.Toplevel(window)
     custom_window.title("Custom Point Selector")
-    custom_window.geometry("300x350")
+    custom_window.geometry("300x400")
 
-    points = []
+    points = training_data.copy()  # Kopiowanie istniejących danych treningowych
 
     coord_label = tk.Label(custom_window, text="X: 0, Y: 0")
     coord_label.pack(pady=5)
@@ -105,9 +105,10 @@ def open_custom_point_window():
         x_scaled = x / 10
         y_scaled = (canvas_height - y) / 10
         label = label_var.get()
-        canvas.create_oval(x-2, y-2, x+2, y+2, fill='black')
+        canvas.create_oval(x - 2, y - 2, x + 2, y + 2, fill='black')
         points.append((x_scaled, y_scaled, label))
         coord_label.config(text=f"X: {x_scaled:.2f}, Y: {y_scaled:.2f}")
+
     def save_points():
         training_data.clear()
         for point in points:
@@ -116,19 +117,26 @@ def open_custom_point_window():
         messagebox.showinfo("Punkty wczytane", "Wczytano punkty")
         custom_window.destroy()
 
-    canvas = tk.Canvas(custom_window, bg="white")
-    canvas.pack(fill=tk.BOTH, expand=True)
+    canvas = tk.Canvas(custom_window, bg="white", width=250, height=250)
+    canvas.pack(pady=10)
     canvas.bind("<Button-1>", on_click)
+
+    # Wyświetlanie istniejących punktów
+    for point in points:
+        x, y, label = point
+        canvas_x = x * 10
+        canvas_y = 250 - (y * 10)
+        canvas.create_oval(canvas_x - 2, canvas_y - 2, canvas_x + 2, canvas_y + 2, fill='black')
 
     label_var = tk.IntVar()
     label_frame = tk.Frame(custom_window)
-    label_frame.pack()
-    tk.Radiobutton(label_frame, text="Label 0", variable=label_var, value=0).pack(side=tk.LEFT)
-    tk.Radiobutton(label_frame, text="Label 1", variable=label_var, value=1).pack(side=tk.LEFT)
+    label_frame.pack(pady=5)
+    tk.Radiobutton(label_frame, text="Label 0", variable=label_var, value=0).pack(side=tk.LEFT, padx=10)
+    tk.Radiobutton(label_frame, text="Label 1", variable=label_var, value=1).pack(side=tk.LEFT, padx=10)
     label_var.set(0)
 
     save_button = tk.Button(custom_window, text="Save Points", command=save_points)
-    save_button.pack()
+    save_button.pack(pady=10)
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / "assets" / "frame0"
