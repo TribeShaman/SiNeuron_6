@@ -15,7 +15,7 @@ learning_threshold = 0.01
 learning_rate = 0.01
 input_size = 3
 
-neuron = Perceptron(learning_rate,input_size)
+neuron = Perceptron(learning_rate, input_size)
 
 def load_file():
     file_path = filedialog.askopenfilename()
@@ -144,10 +144,9 @@ ASSETS_PATH = OUTPUT_PATH / "assets" / "frame0"
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-
 window = Tk()
 
-window.geometry("1200x900")
+window.geometry("1200x950")
 window.configure(bg = "#F6F9FF")
 
 
@@ -171,12 +170,12 @@ canvas.create_rectangle(
     outline="")
 
 canvas.create_text(
-    0.0,
+    345.0,
     0.0,
     anchor="nw",
     text="Perceptron",
     fill="#F6F9FF",
-    font=("Karla ExtraBold", 96 * -1)
+    font=("Noto Sans Bold", 96 * -1)
 )
 
 button_image_1 = PhotoImage(
@@ -201,13 +200,13 @@ button_2 = Button(
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command=load_file,
+    command=lambda: print("Zapisz stan"),
     relief="flat"
 )
 button_2.place(
-    x=714.0,
-    y=170.0,
-    width=184.0,
+    x=414.0,
+    y=850.0,
+    width=372.0,
     height=81.0
 )
 
@@ -217,11 +216,11 @@ button_3 = Button(
     image=button_image_3,
     borderwidth=0,
     highlightthickness=0,
-    command=open_custom_point_window,
+    command=load_file,
     relief="flat"
 )
 button_3.place(
-    x=902.0,
+    x=714.0,
     y=170.0,
     width=184.0,
     height=81.0
@@ -233,13 +232,13 @@ button_4 = Button(
     image=button_image_4,
     borderwidth=0,
     highlightthickness=0,
-    command=learn,
+    command=open_custom_point_window,
     relief="flat"
 )
 button_4.place(
-    x=114.0,
-    y=327.0,
-    width=372.0,
+    x=902.0,
+    y=170.0,
+    width=184.0,
     height=81.0
 )
 
@@ -249,13 +248,61 @@ button_5 = Button(
     image=button_image_5,
     borderwidth=0,
     highlightthickness=0,
-    command=plot_graph,
+    command=learn,
     relief="flat"
 )
 button_5.place(
+    x=114.0,
+    y=327.0,
+    width=184.0,
+    height=81.0
+)
+
+button_image_6 = PhotoImage(
+    file=relative_to_assets("button_6.png"))
+button_6 = Button(
+    image=button_image_6,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: print("Naucz Adaline"),
+    relief="flat"
+)
+button_6.place(
+    x=302.0,
+    y=327.0,
+    width=184.0,
+    height=81.0
+)
+
+button_image_7 = PhotoImage(
+    file=relative_to_assets("button_7.png"))
+button_7 = Button(
+    image=button_image_7,
+    borderwidth=0,
+    highlightthickness=0,
+    command=plot_graph,
+    relief="flat"
+)
+button_7.place(
     x=714.0,
     y=327.0,
-    width=372.0,
+    width=184.0,
+    height=81.0
+)
+
+button_image_8 = PhotoImage(
+    file=relative_to_assets("button_8.png"))
+button_8 = Button(
+    image=button_image_8,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: print("Pokaż jeden krok"),
+    relief="flat"
+)
+button_8.place(
+    x=902.0,
+    y=327.0,
+    width=184.0,
     height=81.0
 )
 
@@ -266,5 +313,6 @@ plot_frame.place(
     width=1100.0,
     height=400.0
 )
+
 window.resizable(False, False)
 window.mainloop()
