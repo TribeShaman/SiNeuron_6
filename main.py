@@ -4,6 +4,7 @@ from tkinter import messagebox
 import matplotlib.pyplot as plt
 import numpy as np
 from perceptron import Perceptron
+from adaline import Adaline
 import data_generator
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from pathlib import Path
@@ -15,8 +16,8 @@ learning_threshold = 0.01
 learning_rate = 0.01
 input_size = 3
 
-neuron = Perceptron(learning_rate, input_size)
-
+perceptron = Perceptron(learning_rate, input_size)
+adaline = Adaline(learning_rate,input_size)
 def load_file():
     file_path = filedialog.askopenfilename()
     training_data.clear()
@@ -38,7 +39,7 @@ def plot_graph():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
 
     # Wykres 1: Historia błędów treningowych
-    error_history = neuron.get_error_history()
+    error_history = perceptron.get_error_history()
     ax1.plot(error_history)
     ax1.set_title('Perceptron Training Error History')
     ax1.set_xlabel('Iteration')
@@ -66,7 +67,57 @@ def plot_graph():
     ax2.scatter(class_1_x, class_1_y, color='red', label='Class 1')
 
     x_values = np.linspace(0, 30, 100)
-    y_values = (-neuron.weights[1] * x_values - neuron.weights[0]) / neuron.weights[2]
+    y_values = (-perceptron.weights[1] * x_values - perceptron.weights[0]) / perceptron.weights[2]
+    ax2.plot(x_values, y_values, color='green', label='Decision Boundary')
+
+    ax2.legend()
+    ax2.set_xlabel('X')
+    ax2.set_ylabel('Y')
+    ax2.set_title('Classification with Perceptron')
+    ax2.grid(True)
+    ax2.set_xlim(0, 25)
+    ax2.set_ylim(0, 25)
+
+    canvas = FigureCanvasTkAgg(fig, master=plot_frame)
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+def plot_graph_adaline():
+    for widget in plot_frame.winfo_children():
+        widget.destroy()
+    plt.close()
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+
+    # Wykres 1: Historia błędów treningowych
+    error_history = adaline.get_error_history()
+    ax1.plot(error_history)
+    ax1.set_title('Adaline Training Error History')
+    ax1.set_xlabel('Iteration')
+    ax1.set_ylabel('Number of Misclassifications')
+    ax1.set_xlim(-30, iterations + 30)
+    ax1.set_ylim(-0.1, 0.4)
+    ax1.grid(True)
+
+    # Wykres 2: Klasyfikacja z perceptronem
+    class_0_x = []
+    class_0_y = []
+    class_1_x = []
+    class_1_y = []
+
+    for inputs in training_data:
+        label = int(inputs[-1])
+        if label == 0:
+            class_0_x.append(inputs[0])
+            class_0_y.append(inputs[1])
+        else:
+            class_1_x.append(inputs[0])
+            class_1_y.append(inputs[1])
+
+    ax2.scatter(class_0_x, class_0_y, color='blue', label='Class 0')
+    ax2.scatter(class_1_x, class_1_y, color='red', label='Class 1')
+
+    x_values = np.linspace(0, 30, 100)
+    y_values = (-adaline.weights[1] * x_values - adaline.weights[0]) / perceptron.weights[2]
     ax2.plot(x_values, y_values, color='green', label='Decision Boundary')
 
     ax2.legend()
@@ -82,13 +133,23 @@ def plot_graph():
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
 def learn():
-    neuron.weights = np.random.rand(input_size)
-    neuron.errors = []
+    perceptron.weights = np.random.rand(input_size)
+    perceptron.errors = []
     for _ in range(iterations):
-        neuron.train(training_data)
-        if neuron.errors[-1] <= learning_threshold:
+        perceptron.train(training_data)
+        if perceptron.errors[-1] <= learning_threshold:
             break
-
+def learn_adaline():
+    adaline.weights = np.random.rand(input_size)
+    adaline.errors = []
+    for _ in range(iterations):
+        adaline.train(training_data)
+        if adaline.errors[-1] <= learning_threshold:
+            break
+def learnOne():
+    perceptron.train(training_data)
+def learnOne_adaline():
+    adaline.train(training_data)
 def open_custom_point_window():
     custom_window = tk.Toplevel(window)
     custom_window.title("Custom Point Selector")
@@ -258,6 +319,22 @@ button_5.place(
     height=81.0
 )
 
+button_image_5a = PhotoImage(
+    file=relative_to_assets("button_8.png"))
+button_5a = Button(
+    image=button_image_5a,
+    borderwidth=0,
+    highlightthickness=0,
+    command=learnOne,
+    relief="flat"
+)
+button_5a.place(
+    x=114.0,
+    y=242.0,
+    width=184.0,
+    height=81.0
+)
+
 button_image_6 = PhotoImage(
     file=relative_to_assets("button_6.png"))
 button_6 = Button(
@@ -270,6 +347,22 @@ button_6 = Button(
 button_6.place(
     x=302.0,
     y=327.0,
+    width=184.0,
+    height=81.0
+)
+
+button_image_6a = PhotoImage(
+    file=relative_to_assets("button_8.png"))
+button_6a = Button(
+    image=button_image_6a,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: print("ucz raz"),
+    relief="flat"
+)
+button_6a.place(
+    x=302.0,
+    y=242.0,
     width=184.0,
     height=81.0
 )
@@ -290,21 +383,7 @@ button_7.place(
     height=81.0
 )
 
-button_image_8 = PhotoImage(
-    file=relative_to_assets("button_8.png"))
-button_8 = Button(
-    image=button_image_8,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("Pokaż jeden krok"),
-    relief="flat"
-)
-button_8.place(
-    x=902.0,
-    y=327.0,
-    width=184.0,
-    height=81.0
-)
+
 
 plot_frame = tk.Frame(window)
 plot_frame.place(
