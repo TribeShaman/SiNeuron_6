@@ -231,12 +231,30 @@ canvas.create_rectangle(
     outline="")
 
 canvas.create_text(
-    345.0,
+    208.0,
     0.0,
     anchor="nw",
-    text="Perceptron",
+    text="Uczenie neuronu",
     fill="#F6F9FF",
-    font=("Noto Sans Bold", 96 * -1)
+    font=("Noto Sans", 96 * -1,  "bold")
+)
+
+canvas.create_text(
+    800.0,
+    244.0,
+    anchor="nw",
+    text="Adaline",
+    fill="#000000",
+    font=("Noto Sans", 48 * -1,  "bold")
+)
+
+canvas.create_text(
+    225.0,
+    244.0,
+    anchor="nw",
+    text="Percepton",
+    fill="#000000",
+    font=("Noto Sans", 48 * -1,  "bold")
 )
 
 button_image_1 = PhotoImage(
@@ -249,8 +267,8 @@ button_1 = Button(
     relief="flat"
 )
 button_1.place(
-    x=114.0,
-    y=174.0,
+    x=208.0,
+    y=140.0,
     width=372.0,
     height=81.0
 )
@@ -266,7 +284,7 @@ button_2 = Button(
 )
 button_2.place(
     x=414.0,
-    y=850.0,
+    y=860.0,
     width=372.0,
     height=81.0
 )
@@ -281,8 +299,8 @@ button_3 = Button(
     relief="flat"
 )
 button_3.place(
-    x=714.0,
-    y=170.0,
+    x=596.0,
+    y=140.0,
     width=184.0,
     height=81.0
 )
@@ -297,8 +315,8 @@ button_4 = Button(
     relief="flat"
 )
 button_4.place(
-    x=902.0,
-    y=170.0,
+    x=795.0,
+    y=140.0,
     width=184.0,
     height=81.0
 )
@@ -313,24 +331,8 @@ button_5 = Button(
     relief="flat"
 )
 button_5.place(
-    x=114.0,
-    y=327.0,
-    width=184.0,
-    height=81.0
-)
-
-button_image_5a = PhotoImage(
-    file=relative_to_assets("button_8.png"))
-button_5a = Button(
-    image=button_image_5a,
-    borderwidth=0,
-    highlightthickness=0,
-    command=learnOne,
-    relief="flat"
-)
-button_5a.place(
-    x=114.0,
-    y=242.0,
+    x=24.0,
+    y=244.0,
     width=184.0,
     height=81.0
 )
@@ -341,28 +343,12 @@ button_6 = Button(
     image=button_image_6,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("Naucz Adaline"),
+    command=learnOne_adaline,
     relief="flat"
 )
 button_6.place(
-    x=302.0,
-    y=327.0,
-    width=184.0,
-    height=81.0
-)
-
-button_image_6a = PhotoImage(
-    file=relative_to_assets("button_8.png"))
-button_6a = Button(
-    image=button_image_6a,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("ucz raz"),
-    relief="flat"
-)
-button_6a.place(
-    x=302.0,
-    y=242.0,
+    x=994.0,
+    y=339.0,
     width=184.0,
     height=81.0
 )
@@ -373,22 +359,68 @@ button_7 = Button(
     image=button_image_7,
     borderwidth=0,
     highlightthickness=0,
-    command=plot_graph,
+    command=learnOne,
     relief="flat"
 )
 button_7.place(
-    x=714.0,
-    y=327.0,
+    x=24.0,
+    y=339.0,
     width=184.0,
     height=81.0
 )
 
+button_image_8 = PhotoImage(
+    file=relative_to_assets("button_8.png"))
+button_8 = Button(
+    image=button_image_8,
+    borderwidth=0,
+    highlightthickness=0,
+    command=learn_adaline,
+    relief="flat"
+)
+button_8.place(
+    x=994.0,
+    y=239.0,
+    width=184.0,
+    height=81.0
+)
 
+button_image_9 = PhotoImage(
+    file=relative_to_assets("button_9.png"))
+button_9 = Button(
+    image=button_image_9,
+    borderwidth=0,
+    highlightthickness=0,
+    command=plot_graph,
+    relief="flat"
+)
+button_9.place(
+    x=230.0,
+    y=339.0,
+    width=184.0,
+    height=81.0
+)
+
+button_image_10 = PhotoImage(
+    file=relative_to_assets("button_10.png"))
+button_10 = Button(
+    image=button_image_10,
+    borderwidth=0,
+    highlightthickness=0,
+    command=plot_graph_adaline,
+    relief="flat"
+)
+button_10.place(
+    x=795.0,
+    y=339.0,
+    width=184.0,
+    height=81.0
+)
 
 plot_frame = tk.Frame(window)
 plot_frame.place(
     x=50.0,
-    y=410.0,
+    y=460.0,
     width=1100.0,
     height=400.0
 )
