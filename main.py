@@ -1,6 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog
-from tkinter import messagebox
+from tkinter import filedialog, messagebox
 import matplotlib.pyplot as plt
 import numpy as np
 from perceptron import Perceptron
@@ -12,12 +11,14 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 training_data = []
 iterations = 1000
-learning_threshold = 0.01
-learning_rate = 0.01
+learning_threshold = 0
+learning_rate = 0.001
+learning_rate_adaline = 0.0001
 input_size = 3
 
 perceptron = Perceptron(learning_rate, input_size)
-adaline = Adaline(learning_rate,input_size)
+adaline = Adaline(learning_rate_adaline, input_size)
+
 def load_file():
     file_path = filedialog.askopenfilename()
     training_data.clear()
@@ -93,12 +94,11 @@ def plot_graph_adaline():
     ax1.plot(error_history)
     ax1.set_title('Adaline Training Error History')
     ax1.set_xlabel('Iteration')
-    ax1.set_ylabel('Number of Misclassifications')
+    ax1.set_ylabel('Mean Squared Error')
     ax1.set_xlim(-30, iterations + 30)
-    ax1.set_ylim(-0.1, 0.4)
     ax1.grid(True)
 
-    # Wykres 2: Klasyfikacja z perceptronem
+    # Wykres 2: Klasyfikacja z Adaline
     class_0_x = []
     class_0_y = []
     class_1_x = []
@@ -116,21 +116,28 @@ def plot_graph_adaline():
     ax2.scatter(class_0_x, class_0_y, color='blue', label='Class 0')
     ax2.scatter(class_1_x, class_1_y, color='red', label='Class 1')
 
-    x_values = np.linspace(0, 30, 100)
-    y_values = (-adaline.weights[1] * x_values - adaline.weights[0]) / perceptron.weights[2]
+    # Obliczanie granicy decyzyjnej w znormalizowanym zakresie
+    x_values_norm = np.linspace(0, 1, 100)
+    y_values_norm = (-adaline.weights[1] * x_values_norm - adaline.weights[0]) / adaline.weights[2]
+
+    # Przeskalowanie do oryginalnych wartości danych treningowych
+    x_values = x_values_norm * (adaline.max_vals[0] - adaline.min_vals[0]) + adaline.min_vals[0]
+    y_values = y_values_norm * (adaline.max_vals[1] - adaline.min_vals[1]) + adaline.min_vals[1]
+
     ax2.plot(x_values, y_values, color='green', label='Decision Boundary')
 
     ax2.legend()
     ax2.set_xlabel('X')
     ax2.set_ylabel('Y')
-    ax2.set_title('Classification with Perceptron')
+    ax2.set_title('Classification with Adaline')
     ax2.grid(True)
-    ax2.set_xlim(0, 25)
-    ax2.set_ylim(0, 25)
+
 
     canvas = FigureCanvasTkAgg(fig, master=plot_frame)
     canvas.draw()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+
 
 def learn():
     perceptron.weights = np.random.rand(input_size)
@@ -144,8 +151,7 @@ def learn_adaline():
     adaline.errors = []
     for _ in range(iterations):
         adaline.train(training_data)
-        if adaline.errors[-1] <= learning_threshold:
-            break
+
 def learnOne():
     perceptron.train(training_data)
 def learnOne_adaline():

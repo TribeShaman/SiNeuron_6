@@ -8,11 +8,11 @@ def generate_data():
     generated_data = []
 
     # Generowanie danych
-    for _ in range(100):
+    for _ in range(250):
         x = random.randint(0, 25)
         y = random.randint(0, 25)
 
-        if y >= (-(1 / 3) * x) + 15:
+        if y >= -(2 * x)+10:
             label = 0
         else:
             label = 1

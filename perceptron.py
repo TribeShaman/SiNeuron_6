@@ -20,11 +20,10 @@ class Perceptron:
             label = inputs[-1]  # Pobranie etykiety z danych wejściowych
             prediction = self.predict(inputs)
             error = label - prediction  # obliczenie bledu
+            print(error)
             error_sqr = error*error
             self.weights[1:] += self.learning_rate * error * np.array(inputs[:-1],dtype=float)  # Korekcja wag (bez biasu i label)
             self.weights[0] += self.learning_rate * error # Korekcja biasu
-            a = round(-self.weights[1] / self.weights[2], 2)  # Współczynnik kierunkowy dla x
-            b = round(-self.weights[0] / self.weights[2], 2)  # Przesunięcie w osi y
             total_error += int(error_sqr != 0)
         self.errors.append( total_error / len(training_inputs))
 
